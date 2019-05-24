@@ -11,7 +11,8 @@ class Game extends Component {
         computerScore: 0,
         player: '',
         computer: '',
-        status: ''
+        status: '',
+
       };
       this.triggerPlay = this.triggerPlay.bind(this);
       this.handleReset = this.handleReset.bind(this);
@@ -38,12 +39,12 @@ class Game extends Component {
   }
 
   triggerPlay(player) {
-    clearTimeout(this.timeout);
+//    clearTimeout(this.timeout);
+//    this.clearUI();
+    let computerScore = this.state.computerScore;
+    let playerScore = this.state.playerScore;
+    if (computerScore === 5 || playerScore === 5 ) return false;  
     let computer = this.makeRandomSelection(this.opts);
-    this.setState({
-      player: player,
-      computer: computer
-    });
     if (player === computer) {
       this.setState({
         status: 'Tie'
@@ -51,26 +52,32 @@ class Game extends Component {
     } else {
       let winner = this.selectWinner(player,computer);
       if (winner) {
+        playerScore += 1;
         this.setState({
-          playerScore: this.state.playerScore+1,
+          player: player,
+          computer: computer,
+          playerScore: playerScore,
           status: 'Player'
         });
       } else {
+        computerScore += 1;
         this.setState({
-          computerScore: this.state.computerScore+1,
+          player: player,
+          computer: computer,
+          computerScore: computerScore,
           status: 'Computer'
         });
       }
     }
-    if (this.state.playerScore === 5) {
+    if (playerScore === 5) {
       this.setState({ status: 'Player wins the match!' });
-      this.handleReset();
-    } else if(this.state.computerScore === 5){
+//      this.handleReset();
+    } else if(computerScore === 5){
       this.setState({ status: 'Computer wins the match!' });
-      this.handleReset();
+//      this.handleReset();
     }
 
-    this.timeout = setTimeout(() => { this.clearUI(); }, 1000);
+    //this.timeout = setTimeout(() => { this.clearUI(); }, 1000);
   }
 
   handleReset(){
